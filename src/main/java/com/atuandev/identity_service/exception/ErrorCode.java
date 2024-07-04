@@ -1,0 +1,25 @@
+package com.atuandev.identity_service.exception;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.experimental.FieldDefaults;
+import org.springframework.http.HttpStatus;
+
+@Getter
+@AllArgsConstructor
+@FieldDefaults(level = lombok.AccessLevel.PRIVATE, makeFinal = true)
+public enum ErrorCode {
+    UNCATEGORIZED(9999, "Uncategorized error", HttpStatus.INTERNAL_SERVER_ERROR),
+    INVALID_KEY(1001, "Invalid key message", HttpStatus.BAD_REQUEST),
+    USER_EXISTS(1002, "User already exists", HttpStatus.BAD_REQUEST),
+    USER_NOT_FOUND(1003, "User not found", HttpStatus.NOT_FOUND),
+    USERNAME_INVALID(1004, "Username is at least 3 characters", HttpStatus.BAD_REQUEST),
+    PASSWORD_INVALID(1005, "Password is at least 8 characters", HttpStatus.BAD_REQUEST),
+    UNAUTHENTICATED(1006, "Unauthenticated", HttpStatus.UNAUTHORIZED),
+    UNAUTHORIZED(1007, "You do not have permission", HttpStatus.FORBIDDEN),
+    ;
+
+    int code;
+    String message;
+    HttpStatus statusCode;
+}
