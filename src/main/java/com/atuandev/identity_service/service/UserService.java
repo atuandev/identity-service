@@ -3,11 +3,12 @@ package com.atuandev.identity_service.service;
 import com.atuandev.identity_service.dto.request.UserCreationRequest;
 import com.atuandev.identity_service.dto.request.UserUpdateRequest;
 import com.atuandev.identity_service.dto.response.UserResponse;
+import com.atuandev.identity_service.entity.Role;
 import com.atuandev.identity_service.entity.User;
-import com.atuandev.identity_service.enums.Role;
 import com.atuandev.identity_service.exception.AppException;
 import com.atuandev.identity_service.exception.ErrorCode;
 import com.atuandev.identity_service.mapper.UserMapper;
+import com.atuandev.identity_service.repository.RoleRepository;
 import com.atuandev.identity_service.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +29,7 @@ import java.util.List;
 @Slf4j
 public class UserService {
     UserRepository userRepository;
+    RoleRepository roleRepository;
     UserMapper userMapper;
     PasswordEncoder passwordEncoder;
 
@@ -38,9 +41,9 @@ public class UserService {
 
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        HashSet<String> roles = new HashSet<>();
-        roles.add(Role.USER.name());
-//        user.setRoles(roles);
+        var roles = new HashSet<Role>();
+        roles.add(roleRepository.findById("USER").orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND)));
+        user.setRoles(roles);
 
         return userMapper.toUserResponse(userRepository.save(user));
     }
@@ -69,6 +72,11 @@ public class UserService {
     public UserResponse updateUser(String id, UserUpdateRequest request) {
         User user = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
         userMapper.updateUser(user, request);
+
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+
+        var roles = roleRepository.findAllById(request.getRoles());
+        user.setRoles(new HashSet<>(roles));
 
         return userMapper.toUserResponse(userRepository.save(user));
     }

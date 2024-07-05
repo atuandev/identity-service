@@ -1,10 +1,14 @@
 package com.atuandev.identity_service.dto.request;
 
 import jakarta.validation.constraints.Size;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @Builder
@@ -18,5 +22,5 @@ public class UserUpdateRequest {
     String firstName;
     String lastName;
     LocalDate dob;
-
+    List<String> roles;
 }

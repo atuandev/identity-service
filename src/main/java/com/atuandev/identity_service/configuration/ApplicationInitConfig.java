@@ -1,6 +1,10 @@
 package com.atuandev.identity_service.configuration;
 
+import com.atuandev.identity_service.entity.Role;
 import com.atuandev.identity_service.entity.User;
+import com.atuandev.identity_service.exception.AppException;
+import com.atuandev.identity_service.exception.ErrorCode;
+import com.atuandev.identity_service.repository.RoleRepository;
 import com.atuandev.identity_service.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -18,18 +22,19 @@ import java.util.HashSet;
 @Slf4j
 public class ApplicationInitConfig {
 
+    RoleRepository roleRepository;
     PasswordEncoder passwordEncoder;
 
     @Bean
     ApplicationRunner applicationRunner(UserRepository userRepository) {
         return args -> {
             if (userRepository.findByUsername("admin").isEmpty()) {
-                var roles = new HashSet<String>();
-                roles.add("ADMIN");
+                var roles = new HashSet<Role>();
+                roles.add(roleRepository.findById("ADMIN").orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND)));
                 User user = User.builder()
                         .username("admin")
                         .password(passwordEncoder.encode("admin"))
-//                        .roles(roles)
+                        .roles(roles)
                         .build();
 
                 userRepository.save(user);
