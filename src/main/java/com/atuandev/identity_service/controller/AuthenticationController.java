@@ -3,6 +3,7 @@ package com.atuandev.identity_service.controller;
 import com.atuandev.identity_service.dto.ApiResponse;
 import com.atuandev.identity_service.dto.request.AuthenticationRequest;
 import com.atuandev.identity_service.dto.request.IntrospectRequest;
+import com.atuandev.identity_service.dto.request.LogoutRequest;
 import com.atuandev.identity_service.dto.response.AuthenticationResponse;
 import com.atuandev.identity_service.dto.response.IntrospectResponse;
 import com.atuandev.identity_service.service.AuthenticationService;
@@ -36,6 +37,13 @@ public class AuthenticationController {
         var result = authenticationService.introspect(request);
         return ApiResponse.<IntrospectResponse>builder()
                 .result(result)
+                .build();
+    }
+
+    @PostMapping("/logout")
+    ApiResponse<Void> logout(@RequestBody LogoutRequest request) throws ParseException, JOSEException {
+        authenticationService.logout(request);
+        return ApiResponse.<Void>builder()
                 .build();
     }
 }

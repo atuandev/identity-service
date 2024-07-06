@@ -60,7 +60,6 @@ public class GlobalExceptionHandler {
         errorCode = ErrorCode.valueOf(enumKey);
 
         var constraintViolation = e.getBindingResult().getAllErrors().getFirst().unwrap(ConstraintViolation.class);
-
         var attributes = constraintViolation.getConstraintDescriptor().getAttributes();
 
         return ResponseEntity.badRequest().body(
