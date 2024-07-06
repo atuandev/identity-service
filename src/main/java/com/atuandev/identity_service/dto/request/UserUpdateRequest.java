@@ -1,5 +1,6 @@
 package com.atuandev.identity_service.dto.request;
 
+import com.atuandev.identity_service.validator.DobConstraint;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,6 +22,9 @@ public class UserUpdateRequest {
     String password;
     String firstName;
     String lastName;
+
+    @DobConstraint(min = 18, message = "INVALID_DOB")
     LocalDate dob;
+
     List<String> roles;
 }
