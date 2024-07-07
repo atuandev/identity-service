@@ -17,7 +17,7 @@ import java.time.LocalDate;
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
 public class UserCreationRequest {
 
-    @Size(min = 3, message = "USERNAME_INVALID")
+    @Size(min = 4, message = "USERNAME_INVALID")
     String username;
 
     @Size(min = 8, message = "PASSWORD_INVALID")
