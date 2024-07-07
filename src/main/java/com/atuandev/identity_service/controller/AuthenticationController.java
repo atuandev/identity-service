@@ -4,6 +4,7 @@ import com.atuandev.identity_service.dto.ApiResponse;
 import com.atuandev.identity_service.dto.request.AuthenticationRequest;
 import com.atuandev.identity_service.dto.request.IntrospectRequest;
 import com.atuandev.identity_service.dto.request.LogoutRequest;
+import com.atuandev.identity_service.dto.request.RefreshRequest;
 import com.atuandev.identity_service.dto.response.AuthenticationResponse;
 import com.atuandev.identity_service.dto.response.IntrospectResponse;
 import com.atuandev.identity_service.service.AuthenticationService;
@@ -44,6 +45,14 @@ public class AuthenticationController {
     ApiResponse<Void> logout(@RequestBody LogoutRequest request) throws ParseException, JOSEException {
         authenticationService.logout(request);
         return ApiResponse.<Void>builder()
+                .build();
+    }
+
+    @PostMapping("/refresh")
+    ApiResponse<AuthenticationResponse> refresh(@RequestBody RefreshRequest request) throws ParseException, JOSEException {
+        var result = authenticationService.refreshToken(request);
+        return ApiResponse.<AuthenticationResponse>builder()
+                .result(result)
                 .build();
     }
 }
