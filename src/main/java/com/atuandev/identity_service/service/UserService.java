@@ -40,9 +40,9 @@ public class UserService {
 
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        var roles = new HashSet<Role>();
-        roles.add(roleRepository.findById("USER").orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND)));
-        user.setRoles(roles);
+//        var roles = new HashSet<Role>();
+//        roles.add(roleRepository.findById("USER").orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND)));
+//        user.setRoles(roles);
 
         return userMapper.toUserResponse(userRepository.save(user));
     }
