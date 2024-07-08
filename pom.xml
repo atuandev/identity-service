@@ -162,10 +162,10 @@
                 </executions>
                 <configuration>
                     <excludes>
-                        <exclude>com/atuandev/identity_service/dto/**</exclude>
-                        <exclude>com/atuandev/identity_service/mapper/**</exclude>
-                        <exclude>com/atuandev/identity_service/entity/**</exclude>
-                        <exclude>com/atuandev/identity_service/configuration/**</exclude>
+                        <exclude>com/atuandev/identityService/dto/**</exclude>
+                        <exclude>com/atuandev/identityService/mapper/**</exclude>
+                        <exclude>com/atuandev/identityService/entity/**</exclude>
+                        <exclude>com/atuandev/identityService/configuration/**</exclude>
                     </excludes>
                 </configuration>
             </plugin>
