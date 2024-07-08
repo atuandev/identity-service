@@ -3,7 +3,6 @@ package com.atuandev.identity_service.service;
 import com.atuandev.identity_service.dto.request.UserCreationRequest;
 import com.atuandev.identity_service.dto.request.UserUpdateRequest;
 import com.atuandev.identity_service.dto.response.UserResponse;
-import com.atuandev.identity_service.entity.Role;
 import com.atuandev.identity_service.entity.User;
 import com.atuandev.identity_service.exception.AppException;
 import com.atuandev.identity_service.exception.ErrorCode;
