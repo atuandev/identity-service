@@ -3,6 +3,7 @@ package com.atuandev.identityService.service;
 import com.atuandev.identityService.dto.request.UserCreationRequest;
 import com.atuandev.identityService.dto.request.UserUpdateRequest;
 import com.atuandev.identityService.dto.response.UserResponse;
+import com.atuandev.identityService.entity.Role;
 import com.atuandev.identityService.entity.User;
 import com.atuandev.identityService.exception.AppException;
 import com.atuandev.identityService.exception.ErrorCode;
@@ -39,9 +40,9 @@ public class UserService {
 
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
-//        var roles = new HashSet<Role>();
+        var roles = new HashSet<Role>();
 //        roles.add(roleRepository.findById("USER").orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND)));
-//        user.setRoles(roles);
+        user.setRoles(roles);
 
         return userMapper.toUserResponse(userRepository.save(user));
     }
