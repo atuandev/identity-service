@@ -3,6 +3,7 @@ package com.atuandev.identityService.service;
 import java.util.HashSet;
 import java.util.List;
 
+import com.atuandev.identityService.constant.PredefinedRole;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -42,8 +43,7 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
         var roles = new HashSet<Role>();
-        //        roles.add(roleRepository.findById("USER").orElseThrow(() -> new
-        // AppException(ErrorCode.ROLE_NOT_FOUND)));
+        roleRepository.findById(PredefinedRole.USER_ROLE).ifPresent(roles::add);
         user.setRoles(roles);
 
         return userMapper.toUserResponse(userRepository.save(user));
@@ -54,7 +54,7 @@ public class UserService {
         return userMapper.toUserResponseList(userRepository.findAll());
     }
 
-    @PostAuthorize("returnObject.username == authentication.name")
+    @PreAuthorize("hasRole('ADMIN')")
     public UserResponse getUser(String id) {
         User user = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
@@ -70,6 +70,7 @@ public class UserService {
         return userMapper.toUserResponse(user);
     }
 
+    @PostAuthorize("returnObject.username == authentication.name")
     public UserResponse updateUser(String id, UserUpdateRequest request) {
         User user = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
         userMapper.updateUser(user, request);
@@ -82,10 +83,12 @@ public class UserService {
         return userMapper.toUserResponse(userRepository.save(user));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteUser(String id) {
         userRepository.deleteById(id);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteAllUsers() {
         userRepository.deleteAll();
     }

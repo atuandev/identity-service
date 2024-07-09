@@ -1,32 +1,35 @@
 package com.atuandev.identityService.configuration;
 
-import java.util.HashSet;
-
-import org.springframework.boot.ApplicationRunner;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
+import com.atuandev.identityService.constant.PredefinedRole;
 import com.atuandev.identityService.entity.Role;
 import com.atuandev.identityService.entity.User;
 import com.atuandev.identityService.exception.AppException;
 import com.atuandev.identityService.exception.ErrorCode;
 import com.atuandev.identityService.repository.RoleRepository;
 import com.atuandev.identityService.repository.UserRepository;
-
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.HashSet;
 
 @Configuration
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = lombok.AccessLevel.PRIVATE)
 @Slf4j
 public class ApplicationInitConfig {
-    private static final String DEFAULT_USERNAME = "admin";
+    @NonFinal
+    static final String ADMIN_USERNAME = "admin";
 
-    RoleRepository roleRepository;
+    @NonFinal
+    static final String ADMIN_PASSWORD = "admin";
+
     PasswordEncoder passwordEncoder;
 
     @Bean
@@ -34,21 +37,28 @@ public class ApplicationInitConfig {
             prefix = "spring",
             value = "datasource.driverClassName",
             havingValue = "com.mysql.cj.jdbc.Driver")
-    ApplicationRunner applicationRunner(UserRepository userRepository) {
+    ApplicationRunner applicationRunner(UserRepository userRepository, RoleRepository roleRepository) {
+        log.info("Initializing application.....");
         return args -> {
-            if (userRepository.findByUsername(DEFAULT_USERNAME).isEmpty()) {
+            if (userRepository.findByUsername(ADMIN_USERNAME).isEmpty()) {
+                Role adminRole = roleRepository.findById(PredefinedRole.ADMIN_ROLE)
+                        .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND));
+
                 var roles = new HashSet<Role>();
-                roles.add(
-                        roleRepository.findById("ADMIN").orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND)));
+                roles.add(adminRole);
+
                 User user = User.builder()
-                        .username(DEFAULT_USERNAME)
-                        .password(passwordEncoder.encode("admin"))
+                        .username(ADMIN_USERNAME)
+                        .password(passwordEncoder.encode(ADMIN_PASSWORD))
+                        .firstName("Admin")
+                        .lastName("Admin")
                         .roles(roles)
                         .build();
 
                 userRepository.save(user);
                 log.warn("Admin user created with username: 'admin' and password: 'admin', please change it!");
             }
+            log.info("Application initialization completed .....");
         };
     }
 }
