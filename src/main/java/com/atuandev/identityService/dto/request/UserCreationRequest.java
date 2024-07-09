@@ -1,14 +1,16 @@
 package com.atuandev.identityService.dto.request;
 
-import com.atuandev.identityService.validator.DobConstraint;
+import java.time.LocalDate;
+
 import jakarta.validation.constraints.Size;
+
+import com.atuandev.identityService.validator.DobConstraint;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-
-import java.time.LocalDate;
 
 @Data
 @Builder
@@ -22,10 +24,10 @@ public class UserCreationRequest {
 
     @Size(min = 8, message = "PASSWORD_INVALID")
     String password;
+
     String firstName;
     String lastName;
 
     @DobConstraint(min = 18, message = "INVALID_DOB")
     LocalDate dob;
-
 }

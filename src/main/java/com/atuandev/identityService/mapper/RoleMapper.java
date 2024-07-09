@@ -1,10 +1,11 @@
 package com.atuandev.identityService.mapper;
 
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+
 import com.atuandev.identityService.dto.request.RoleRequest;
 import com.atuandev.identityService.dto.response.RoleResponse;
 import com.atuandev.identityService.entity.Role;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface RoleMapper {

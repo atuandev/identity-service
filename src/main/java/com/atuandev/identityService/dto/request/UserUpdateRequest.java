@@ -1,15 +1,17 @@
 package com.atuandev.identityService.dto.request;
 
-import com.atuandev.identityService.validator.DobConstraint;
+import java.time.LocalDate;
+import java.util.List;
+
 import jakarta.validation.constraints.Size;
+
+import com.atuandev.identityService.validator.DobConstraint;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-
-import java.time.LocalDate;
-import java.util.List;
 
 @Data
 @Builder
@@ -20,6 +22,7 @@ public class UserUpdateRequest {
 
     @Size(min = 8, message = "PASSWORD_INVALID")
     String password;
+
     String firstName;
     String lastName;
 

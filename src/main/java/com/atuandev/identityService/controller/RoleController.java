@@ -1,14 +1,16 @@
 package com.atuandev.identityService.controller;
 
+import java.util.List;
+
+import org.springframework.web.bind.annotation.*;
+
 import com.atuandev.identityService.dto.ApiResponse;
 import com.atuandev.identityService.dto.request.RoleRequest;
 import com.atuandev.identityService.dto.response.RoleResponse;
 import com.atuandev.identityService.service.RoleService;
+
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/roles")
@@ -36,5 +38,4 @@ public class RoleController {
         roleService.delete(role);
         return ApiResponse.<Void>builder().build();
     }
-
 }

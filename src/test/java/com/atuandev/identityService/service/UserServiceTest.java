@@ -1,10 +1,14 @@
 package com.atuandev.identityService.service;
 
-import com.atuandev.identityService.dto.request.UserCreationRequest;
-import com.atuandev.identityService.dto.response.UserResponse;
-import com.atuandev.identityService.entity.User;
-import com.atuandev.identityService.exception.AppException;
-import com.atuandev.identityService.repository.UserRepository;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
+
+import java.time.LocalDate;
+import java.util.Optional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,14 +17,11 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.TestPropertySource;
 
-import java.time.LocalDate;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
+import com.atuandev.identityService.dto.request.UserCreationRequest;
+import com.atuandev.identityService.dto.response.UserResponse;
+import com.atuandev.identityService.entity.User;
+import com.atuandev.identityService.exception.AppException;
+import com.atuandev.identityService.repository.UserRepository;
 
 @SpringBootTest
 @TestPropertySource("/test.properties")
@@ -90,9 +91,9 @@ public class UserServiceTest {
         when(userRepository.existsByUsername(anyString())).thenReturn(true);
 
         // WHEN, THEN
-       var exception = assertThrows(AppException.class, () -> userService.createUser(request));
+        var exception = assertThrows(AppException.class, () -> userService.createUser(request));
 
-       assertThat(exception.getErrorCode().getCode()).isEqualTo(1002);
+        assertThat(exception.getErrorCode().getCode()).isEqualTo(1002);
     }
 
     @Test

@@ -1,17 +1,20 @@
 package com.atuandev.identityService.controller;
 
+import java.util.List;
+
+import jakarta.validation.Valid;
+
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
+
 import com.atuandev.identityService.dto.ApiResponse;
 import com.atuandev.identityService.dto.request.UserCreationRequest;
 import com.atuandev.identityService.dto.request.UserUpdateRequest;
 import com.atuandev.identityService.dto.response.UserResponse;
 import com.atuandev.identityService.service.UserService;
-import jakarta.validation.Valid;
+
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/users")
@@ -29,7 +32,7 @@ public class UserController {
 
     @GetMapping
     ApiResponse<List<UserResponse>> getAllUsers() {
-        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        SecurityContextHolder.getContext().getAuthentication();
 
         return ApiResponse.<List<UserResponse>>builder()
                 .result(userService.getAllUsers())
@@ -52,9 +55,7 @@ public class UserController {
 
     @PutMapping("/{userId}")
     ApiResponse<UserResponse> updateUser(
-            @PathVariable("userId") String userId,
-            @RequestBody @Valid UserUpdateRequest request
-    ) {
+            @PathVariable("userId") String userId, @RequestBody @Valid UserUpdateRequest request) {
         return ApiResponse.<UserResponse>builder()
                 .result(userService.updateUser(userId, request))
                 .build();
@@ -63,16 +64,12 @@ public class UserController {
     @DeleteMapping("/{userId}")
     ApiResponse<String> deleteUser(@PathVariable("userId") String userId) {
         userService.deleteUser(userId);
-        return ApiResponse.<String>builder()
-                .result("User deleted")
-                .build();
+        return ApiResponse.<String>builder().result("User deleted").build();
     }
 
     @DeleteMapping
     ApiResponse<String> deleteAllUsers() {
         userService.deleteAllUsers();
-        return ApiResponse.<String>builder()
-                .result("All users deleted")
-                .build();
+        return ApiResponse.<String>builder().result("All users deleted").build();
     }
 }
