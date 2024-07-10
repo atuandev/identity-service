@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 
 @Configuration
@@ -41,8 +42,15 @@ public class ApplicationInitConfig {
         log.info("Initializing application.....");
         return args -> {
             if (userRepository.findByUsername(ADMIN_USERNAME).isEmpty()) {
-                Role adminRole = roleRepository.findById(PredefinedRole.ADMIN_ROLE)
-                        .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND));
+                roleRepository.save(Role.builder()
+                        .name(PredefinedRole.USER_ROLE)
+                        .description("User role")
+                        .build());
+
+                Role adminRole = roleRepository.save(Role.builder()
+                        .name(PredefinedRole.ADMIN_ROLE)
+                        .description("Admin role")
+                        .build());
 
                 var roles = new HashSet<Role>();
                 roles.add(adminRole);
